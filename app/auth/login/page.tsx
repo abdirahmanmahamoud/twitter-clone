@@ -1,3 +1,4 @@
+"use client";
 import {
   CardContent,
   CardDescription,
@@ -10,8 +11,39 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { useState } from "react";
+import { signIn } from "next-auth/react";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 const LoginPage = () => {
+  const router = useRouter();
+  const [loading, setLoading] = useState<boolean>(false);
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    setLoading(true);
+
+    await signIn("credentials", {
+      email: formData.email,
+      password: formData.password,
+      redirect: false,
+    }).then((data) => {
+      if (data?.status == 200) {
+        router.push("/");
+        router.refresh();
+      } else {
+        toast.error("Invalid credentials!");
+        setLoading(false);
+        return null;
+      }
+    });
+  };
+
   return (
     <>
       <CardHeader>
@@ -22,7 +54,7 @@ const LoginPage = () => {
         <SocialMedia />
         <div className='mt-3 text-center text-lg'>Or</div>
         <div className='pt-2'>
-          <form>
+          <form onSubmit={(e) => handleSubmit(e)}>
             <div className='space-y-4'>
               <div className='space-y-1'>
                 <Label className='text-lg'>Email</Label>
@@ -31,6 +63,11 @@ const LoginPage = () => {
                   name='email'
                   className='text-lg'
                   placeholder='example@example.com'
+                  disabled={loading}
+                  onChange={(e) =>
+                    setFormData({ ...formData, email: e.target.value })
+                  }
+                  required
                 />
               </div>
               <div className='space-y-1'>
@@ -40,12 +77,20 @@ const LoginPage = () => {
                   name='password'
                   className='text-lg'
                   placeholder='******'
+                  disabled={loading}
+                  onChange={(e) =>
+                    setFormData({ ...formData, password: e.target.value })
+                  }
+                  required
                 />
               </div>
             </div>
             <div className='mt-6'>
-              <Button className='w-full bg-blue-700 text-white hover:bg-blue-700/75'>
-                Login
+              <Button
+                className='w-full bg-blue-700 text-white hover:bg-blue-700/75'
+                disabled={loading}
+              >
+                {loading ? "Login...." : "Login"}
               </Button>
             </div>
           </form>
