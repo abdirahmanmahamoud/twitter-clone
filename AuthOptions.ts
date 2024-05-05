@@ -49,5 +49,30 @@ export const AuthOptions: NextAuthOptions = {
       },
     }),
   ],
+  callbacks: {
+    jwt: async ({ token }) => {
+      const userInfo = await db.user.findUnique({
+        where: {
+          email: token.email!,
+        },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          image: true,
+          username: true,
+        },
+      });
+      token.user = userInfo;
+      return token;
+    },
+    session: async ({ session, token }) => {
+      session.user = token.user!;
+      return session;
+    },
+  },
+  session: {
+    strategy: "jwt",
+  },
   adapter: PrismaAdapter(db),
 };
