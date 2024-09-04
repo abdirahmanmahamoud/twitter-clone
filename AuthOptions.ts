@@ -61,6 +61,8 @@ export const AuthOptions: NextAuthOptions = {
           email: true,
           image: true,
           username: true,
+          accountType: true,
+          verifiedBtn: true,
         },
       });
       token.user = userInfo;
