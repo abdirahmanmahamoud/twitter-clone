@@ -23,7 +23,7 @@ const NavBar = async () => {
   const user = session?.user as User;
   console.log(user);
   return (
-    <div className='w-full h-screen pt-2'>
+    <div className='w-[9%] lg:w-[18%]  fixed pt-2 pr-11'>
       <div className='w-12 h-12 rounded-full hover:bg-black/15 dark:hover:bg-white/15 cursor-pointer flex items-center justify-center'>
         <FaXTwitter className='text-3xl cursor-pointer text-black dark:text-white' />
       </div>

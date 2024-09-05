@@ -9,7 +9,7 @@ const Header = () => {
   const tab = searchParams.get("tab");
   //   console.log(searchParams.get("tab"));
   return (
-    <div className='relative top-0 w-full grid grid-cols-2 bg-white/10 dark:bg-black/10 px-1'>
+    <div className='fixed top-0 w-full lg:w-[45%] grid grid-cols-2 bg-white/70 dark:bg-black/70 px-1'>
       <Link
         href='/'
         className='w-full py-3 flex items-center justify-center hover:bg-black/10 dark:hover:bg-white/10 cursor-pointer'

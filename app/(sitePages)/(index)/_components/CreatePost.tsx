@@ -24,7 +24,7 @@ const CreatePost = async () => {
   const session = await getServerSession(AuthOptions);
   const user = session?.user as User;
   return (
-    <div className='w-full px-2 py-3 border-[0.5px] border-black/10 dark:border-white/10'>
+    <div className='w-[95%] px-2 py-3 border-[0.5px] border-black/10 dark:border-white/10'>
       <div className='w-full px-2 flex'>
         <div className='w-11 h-11'>
           <Avatar

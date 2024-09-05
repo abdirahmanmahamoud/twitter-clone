@@ -5,12 +5,14 @@ import Header from "./_components/Header";
 export default function Home() {
   return (
     <div className='w-full flex'>
-      <div className='w-full lg:w-[65%'>
+      <div className='w-full lg:w-[75%]'>
         <Header />
-        <CreatePost />
-        <FeedPost />
+        <div className='mt-16 w-full px-4'>
+          <CreatePost />
+          <FeedPost />
+        </div>
       </div>
-      <div className='hidden lg:block lg:w-[36%] bg-red-400'>7jkry</div>
+      <div className='hidden lg:block lg:w-[25%]'>7jkry</div>
     </div>
   );
 }
