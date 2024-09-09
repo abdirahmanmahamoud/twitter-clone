@@ -1,20 +1,29 @@
+import { User } from "@prisma/client";
 import { Avatar, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "./ui/hover-card";
 import VerifiedBtn from "./VerifiedBtn";
+import { cn } from "@/lib/utils";
+import UserImg from "@/public/userImage.png";
 
 interface Props {
   children: React.ReactNode;
+  user: User;
 }
 
-const HoverCardProfile = ({ children }: Props) => {
+const HoverCardProfile = ({ children, user }: Props) => {
   return (
     <HoverCard>
       <HoverCardTrigger asChild>{children}</HoverCardTrigger>
       <HoverCardContent className='w-80'>
         <div className='w-full flex justify-between'>
-          <Avatar className='w-11 h-11 rounded-none'>
-            <AvatarImage src='https://pbs.twimg.com/profile_images/1820125844666245120/xcQUV1BY_400x400.jpg' />
+          <Avatar
+            className={cn(
+              "w-11 h-11",
+              user.accountType == "business" ? "rounded-lg" : "rounded-full"
+            )}
+          >
+            <AvatarImage src={user.image || (UserImg as any)} />
           </Avatar>
           <Button className='bg-black text-white dark:bg-white dark:text-black rounded-full'>
             Follow
@@ -23,16 +32,14 @@ const HoverCardProfile = ({ children }: Props) => {
         <div className='w-full mt-3'>
           <div className='w-full flex items-center space-x-1'>
             <span className='text-lg font-bold line-clamp-2 leading-4'>
-              Macruuf tech
+              {user.name}
             </span>
-            <VerifiedBtn verified='business' />
+            {user.verifiedBtn && <VerifiedBtn verified={user.accountType} />}
           </div>
           <span className='text-sm font-normal line-clamp-1 leading-4'>
-            @macruuftech
+            @{user.username}
           </span>
-          <p className='text-base font-normal leading-5 mt-2'>
-            Macruuf tech online course and tutorial
-          </p>
+          <p className='text-base font-normal leading-5 mt-2'>{user.bio}</p>
           <div className='w-full grid grid-cols-2 mt-2'>
             <div className='space-x-1'>
               <span className='text-base font-normal leading-5'>183</span>

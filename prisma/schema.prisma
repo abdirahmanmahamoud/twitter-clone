@@ -1,4 +1,3 @@
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -14,7 +13,7 @@ enum AccountType {
   business
   government
 }
- 
+
 model User {
   id            String @id @default(cuid())
   name          String?
@@ -27,25 +26,25 @@ model User {
   url           String?
   password      String?
   accountType   AccountType @default(profile)
-  verifiedBtn      Boolean @default(false)
+  verifiedBtn   Boolean @default(false)
   accounts      Account[]
   sessions      Session[]
-  Authenticator Authenticator[]
-  accountLabel  AccountLabel[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  Authenticators Authenticator[]
+  accountLabels AccountLabel[]
+  post          Post[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
 
 model AccountLabel {
   id           String @id @default(cuid())
   accountId    String
   accountLabel String
-  userId    User @relation(fields: [accountId], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  user         User @relation(fields: [accountId], references: [id], onDelete: Cascade)  // Corrected field
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
 
- 
 model Account {
   userId            String
   type              String
@@ -58,30 +57,30 @@ model Account {
   scope             String?
   id_token          String?
   session_state     String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   @@id([provider, providerAccountId])
 }
- 
+
 model Session {
   sessionToken String @unique
   userId       String
   expires      DateTime
   user         User @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
- 
+
 model VerificationToken {
   identifier String
   token      String
   expires    DateTime
- 
+
   @@id([identifier, token])
 }
- 
+
 model Authenticator {
   id                   String  @id @default(cuid())
   credentialID         String  @unique
@@ -92,6 +91,22 @@ model Authenticator {
   credentialDeviceType String
   credentialBackedUp   Boolean
   transports           String?
- 
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+model Post {
+  id                String  @id @default(cuid())
+  text              String
+  file              String?
+  mention           String?  
+  hash              String?
+  reply             Int     @default(0)
+  repost            Int     @default(0)
+  like              Int     @default(0)
+  view              Int     @default(0) 
+  createUser        String
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  user              User @relation(fields: [createUser], references: [id], onDelete: Cascade)
 }

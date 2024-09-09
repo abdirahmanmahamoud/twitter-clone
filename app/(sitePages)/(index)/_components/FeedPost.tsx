@@ -1,11 +1,18 @@
+import { PostType } from "@/types/Post";
 import Post from "./Post";
+import { User } from "@prisma/client";
 
-const FeedPost = () => {
+interface FeedPostProps {
+  posts: PostType[];
+  mentionUser: User[] | null;
+}
+
+const FeedPost = ({ posts, mentionUser }: FeedPostProps) => {
   return (
     <div className='w-full px-2 mt-4 space-y-3'>
-      <Post />
-      <Post />
-      <Post />
+      {posts.map((post) => (
+        <Post key={post.id} post={post} mentionUser={mentionUser} />
+      ))}
     </div>
   );
 };
