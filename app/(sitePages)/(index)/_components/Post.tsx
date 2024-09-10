@@ -110,9 +110,12 @@ const Post = ({ post, mentionUser }: PostProps) => {
         {post.file && (
           <div className='w-full mt-4'>
             <Image
-              src={postImg}
+              src={`https://yctqcyeyzpmbsiphgxcs.supabase.co/storage/v1/object/public/img-x/${post.file}`}
               alt='image'
-              className='w-full h-auto rounded-md'
+              width={500} // Set a base width
+              height={500 * (9 / 16)} // Set height according to a ratio (e.g., 16:9)
+              className='w-full rounded-lg'
+              layout='responsive'
             />
           </div>
         )}

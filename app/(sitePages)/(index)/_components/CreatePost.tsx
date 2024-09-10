@@ -12,19 +12,23 @@ import {
 import {
   Annoyed,
   CalendarCheck,
-  Image,
+  ImageMinus,
   ListChecks,
   MapPin,
+  XIcon,
 } from "lucide-react";
 import { MdOutlineGifBox } from "react-icons/md";
 import { Button } from "@/components/ui/button";
 import { MentionsInput, Mention } from "react-mentions";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import VerifiedBtn from "@/components/VerifiedBtn";
 import { FaUser } from "react-icons/fa6";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import EmojiPopover from "@/components/EmojiPopover";
+import Image from "next/image";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 interface createPostProps {
   user: User;
@@ -39,6 +43,8 @@ const CreatePost = ({ user, userMention }: createPostProps) => {
   const [loading, setLoading] = useState(false);
   const [loadingBtn, setLoadingBtn] = useState(true);
   const router = useRouter();
+  const imageElementRef = useRef<HTMLInputElement>(null);
+  const supabase = createClientComponentClient();
 
   useEffect(() => {
     if (value.length > 0) {
@@ -46,40 +52,91 @@ const CreatePost = ({ user, userMention }: createPostProps) => {
     }
   }, [value]);
 
+  const onEmojiSelect = (emoji: any) => {
+    setValue((prev) => prev + emoji.native);
+  };
+
   const handleSubmit = () => {
     setLoading(true);
     setLoadingBtn(true);
-    console.log(value, mentionUser, hashTag, file);
 
-    axios
-      .post("/api/post", {
-        value,
-        mentionUser,
-        hashTag,
-        file,
-      })
-      .then((res) => {
-        toast.success("Post created successfully");
-        setValue("");
-        setMentionUser(null);
-        setHashTag(null);
-        setFile(null);
-        setLoading(false);
-        router.refresh();
-      })
-      .catch((error) => {
-        if (error?.response?.data?.message == null) {
-          toast.error(error.message);
-        } else {
-          toast.error(error.response.data.message);
+    if (file == null) {
+      axios
+        .post("/api/post", {
+          value,
+          mentionUser,
+          hashTag,
+          file,
+        })
+        .then((res) => {
+          toast.success("Post created successfully");
+          setValue("");
+          setMentionUser(null);
+          setHashTag(null);
+          setFile(null);
+          setLoading(false);
+          router.refresh();
+        })
+        .catch((error) => {
+          if (error?.response?.data?.message == null) {
+            toast.error(error.message);
+          } else {
+            toast.error(error.response.data.message);
+          }
+          setLoading(false);
+          setLoadingBtn(false);
+        });
+    } else {
+      const upload = async () => {
+        const bucket = "img-x";
+        const { data, error } = await supabase.storage
+          .from(bucket)
+          .upload(file.name, file);
+
+        // Handle error if upload failed
+        if (error) {
+          alert("Error uploading file.");
+          return;
         }
-        setLoading(false);
-        setLoadingBtn(false);
-      });
+        axios
+          .post("/api/post", {
+            value,
+            mentionUser,
+            hashTag,
+            file: data.path,
+          })
+          .then((res) => {
+            toast.success("Post created successfully");
+            setValue("");
+            setMentionUser(null);
+            setHashTag(null);
+            setFile(null);
+            setLoading(false);
+            router.refresh();
+          })
+          .catch((error) => {
+            if (error?.response?.data?.message == null) {
+              toast.error(error.message);
+            } else {
+              toast.error(error.response.data.message);
+            }
+            setLoading(false);
+            setLoadingBtn(false);
+          });
+      };
+      upload();
+    }
   };
 
   return (
     <div className='w-[95%] px-2 py-3 border-[0.5px] border-black/10 dark:border-white/10'>
+      <input
+        type='file'
+        accept='image/*'
+        ref={imageElementRef}
+        onChange={(e) => setFile(e.target.files?.[0])}
+        className='hidden'
+      />
       <div className='w-full px-2 flex'>
         <div className='w-11 h-11'>
           <Avatar
@@ -166,12 +223,37 @@ const CreatePost = ({ user, userMention }: createPostProps) => {
             placeholder='What is happening?'
             className='w-full h-10 bg-transparent outline-none text-black dark:text-white placeholder:text-black/30 dark:placeholder:text-white/30'
           /> */}
+          {file && (
+            <div className='w-full px-2 relative group/image'>
+              <Image
+                src={URL.createObjectURL(file)}
+                alt={file.name}
+                width={500} // Set a base width
+                height={500 * (9 / 16)} // Set height according to a ratio (e.g., 16:9)
+                className='w-full rounded-lg'
+                layout='responsive'
+              />
+              <div
+                className='w-6 h-6 absolute top-0 right-0 z-50 bg-black dark:bg-white rounded-full cursor-pointer hidden group-hover/image:flex items-center justify-center'
+                onClick={() => {
+                  setFile(null);
+                  // imageElementRef.current?.value = "";
+                }}
+              >
+                <XIcon className='w-5 h-5 text-white dark:text-black' />
+              </div>
+            </div>
+          )}
+
           <div className='w-full flex items-center justify-between mt-2'>
             <div className='w-full flex items-center space-x-4'>
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger>
-                    <Image className='w-5 h-5 text-blue-600' />
+                    <ImageMinus
+                      className='w-5 h-5 text-blue-600'
+                      onClick={() => imageElementRef.current?.click()}
+                    />
                   </TooltipTrigger>
                   <TooltipContent className='bg-slate-300 text-black dark:bg-slate-700 dark:text-white'>
                     <p>Media</p>
@@ -198,7 +280,9 @@ const CreatePost = ({ user, userMention }: createPostProps) => {
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
-              <TooltipProvider>
+              <EmojiPopover onEmojiSelect={onEmojiSelect} />
+
+              {/* <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger>
                     <Annoyed className='w-5 h-5 text-blue-600' />
@@ -207,7 +291,7 @@ const CreatePost = ({ user, userMention }: createPostProps) => {
                     <p>Emoji</p>
                   </TooltipContent>
                 </Tooltip>
-              </TooltipProvider>
+              </TooltipProvider> */}
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger>
