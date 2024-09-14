@@ -32,6 +32,7 @@ model User {
   Authenticators Authenticator[]
   accountLabels AccountLabel[]
   post          Post[]
+  likePost      like[]
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 }
@@ -109,4 +110,16 @@ model Post {
   updatedAt         DateTime @updatedAt
 
   user              User @relation(fields: [createUser], references: [id], onDelete: Cascade)
+  likes             like[]
+}
+
+model like {
+  id                String  @id @default(cuid())
+  postId            String
+  userId            String
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  post              Post @relation(fields: [postId], references: [id])
+  user              User @relation(fields: [userId],references: [id])
 }

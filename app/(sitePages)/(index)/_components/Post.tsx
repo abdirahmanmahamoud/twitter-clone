@@ -24,6 +24,7 @@ import { cn } from "@/lib/utils";
 import UserImg from "@/public/userImage.png";
 import { User } from "@prisma/client";
 import React, { useEffect, useState } from "react";
+import PostFooter from "./PostFooter";
 
 interface PostProps {
   post: PostType;
@@ -119,106 +120,7 @@ const Post = ({ post, mentionUser }: PostProps) => {
             />
           </div>
         )}
-        <div className='w-full grid grid-cols-5 py-3 px-2'>
-          <div className='w-full flex items-center'>
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger>
-                  <div className='flex items-center space-x-1'>
-                    <MessageCircle className='w-4 h-4 text-black dark:text-white' />
-                    {post.reply > 0 && (
-                      <span className='text-sm font-normal line-clamp-1 leading-4'>
-                        {post.reply}
-                      </span>
-                    )}
-                  </div>
-                </TooltipTrigger>
-                <TooltipContent className='bg-slate-300 text-black dark:bg-slate-700 dark:text-white'>
-                  <p>Reply</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          </div>
-          <div className='w-full flex items-center'>
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger>
-                  <div className='flex items-center space-x-1'>
-                    <Repeat2 className='w-4 h-4 text-black dark:text-white' />
-                    {post.repost > 0 && (
-                      <span className='text-sm font-normal line-clamp-1 leading-4'>
-                        {post.repost}
-                      </span>
-                    )}
-                  </div>
-                </TooltipTrigger>
-                <TooltipContent className='bg-slate-300 text-black dark:bg-slate-700 dark:text-white'>
-                  <p>Repost</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          </div>
-          <div className='w-full flex items-center'>
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger>
-                  <div className='flex items-center space-x-1'>
-                    <Heart className='w-4 h-4 text-black dark:text-white' />
-                    {post.like > 0 && (
-                      <span className='text-sm font-normal line-clamp-1 leading-4'>
-                        {post.like}
-                      </span>
-                    )}
-                  </div>
-                </TooltipTrigger>
-                <TooltipContent className='bg-slate-300 text-black dark:bg-slate-700 dark:text-white'>
-                  <p>Like</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          </div>
-          <div className='w-full flex items-center'>
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger>
-                  <div className='flex items-center space-x-1'>
-                    <IoStatsChartSharp className='w-4 h-4 text-black dark:text-white' />
-                    {post.view > 0 && (
-                      <span className='text-sm font-normal line-clamp-1 leading-4'>
-                        {post.view}
-                      </span>
-                    )}
-                  </div>
-                </TooltipTrigger>
-                <TooltipContent className='bg-slate-300 text-black dark:bg-slate-700 dark:text-white'>
-                  <p>Views</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          </div>
-          <div className='w-full flex justify-end items-center space-x-3'>
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger>
-                  <Bookmark className='w-4 h-4 text-black dark:text-white' />
-                </TooltipTrigger>
-                <TooltipContent className='bg-slate-300 text-black dark:bg-slate-700 dark:text-white'>
-                  <p>Book marks</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger>
-                  <Download className='w-4 h-4 text-black dark:text-white' />
-                </TooltipTrigger>
-                <TooltipContent className='bg-slate-300 text-black dark:bg-slate-700 dark:text-white'>
-                  <p>Share</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          </div>
-        </div>
+        <PostFooter id={post.id} />
       </div>
     </div>
   );
