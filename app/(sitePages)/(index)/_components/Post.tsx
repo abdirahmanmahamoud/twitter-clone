@@ -67,7 +67,7 @@ const Post = ({ post, mentionUser }: PostProps) => {
 
   return (
     <div className='w-full py-2 flex'>
-      <div className='w-[20%]'>
+      <div className='w-[8%]'>
         <HoverCardProfile user={post.user as any}>
           <Avatar
             className={cn(
@@ -81,7 +81,7 @@ const Post = ({ post, mentionUser }: PostProps) => {
           </Avatar>
         </HoverCardProfile>
       </div>
-      <div className='w-[80%] -ml-4 lg:-ml-[4.8rem]'>
+      <div className='w-[92%] ml-1'>
         <div className='w-full flex items-center space-x-1'>
           <div>
             <HoverCardProfile user={post.user as any}>

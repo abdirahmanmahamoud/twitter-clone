@@ -6,6 +6,7 @@ import { AuthOptions } from "@/AuthOptions";
 import { User } from "@prisma/client";
 import db from "@/lib/db";
 import { Suspense } from "react";
+import SearchUser from "@/components/SearchUser";
 
 export default async function Home() {
   const session = await getServerSession(AuthOptions);
@@ -15,7 +16,7 @@ export default async function Home() {
 
   return (
     <div className='w-full flex'>
-      <div className='w-full lg:w-[75%]'>
+      <div className='w-full lg:w-[70%]'>
         <Header />
         <div className='mt-16 w-full px-4'>
           <CreatePost user={user} userMention={userMention} />
@@ -24,7 +25,9 @@ export default async function Home() {
           </Suspense>
         </div>
       </div>
-      <div className='hidden lg:block lg:w-[25%]'>7jkry</div>
+      <div className='hidden lg:block lg:w-[30%]'>
+        <SearchUser />
+      </div>
     </div>
   );
 }
