@@ -15,10 +15,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ message: "user is required" }, { status: 403 });
   }
 
-  if (!value) {
-    return NextResponse.json({ message: "value is required" }, { status: 403 });
-  }
-
   const post = await db.post.create({
     data: {
       text: value,

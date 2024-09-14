@@ -50,7 +50,11 @@ const CreatePost = ({ user, userMention }: createPostProps) => {
     if (value.length > 0) {
       setLoadingBtn(false);
     }
-  }, [value]);
+
+    if (file != null) {
+      setLoadingBtn(false);
+    }
+  }, [value, file]);
 
   const onEmojiSelect = (emoji: any) => {
     setValue((prev) => prev + emoji.native);
@@ -87,11 +91,13 @@ const CreatePost = ({ user, userMention }: createPostProps) => {
           setLoadingBtn(false);
         });
     } else {
+      const getDate = new Date();
+
       const upload = async () => {
         const bucket = "img-x";
         const { data, error } = await supabase.storage
           .from(bucket)
-          .upload(file.name, file);
+          .upload(`${getDate.getTime()}-${file.name}`, file);
 
         // Handle error if upload failed
         if (error) {
@@ -132,7 +138,7 @@ const CreatePost = ({ user, userMention }: createPostProps) => {
     <div className='w-[95%] px-2 py-3 border-[0.5px] border-black/10 dark:border-white/10'>
       <input
         type='file'
-        accept='image/*'
+        // accept='image/*'
         ref={imageElementRef}
         onChange={(e) => setFile(e.target.files?.[0])}
         className='hidden'
@@ -224,7 +230,7 @@ const CreatePost = ({ user, userMention }: createPostProps) => {
             className='w-full h-10 bg-transparent outline-none text-black dark:text-white placeholder:text-black/30 dark:placeholder:text-white/30'
           /> */}
           {file && (
-            <div className='w-full px-2 relative group/image'>
+            <div className='w-full px-2 mt-3 relative group/image'>
               <Image
                 src={URL.createObjectURL(file)}
                 alt={file.name}
@@ -237,7 +243,7 @@ const CreatePost = ({ user, userMention }: createPostProps) => {
                 className='w-6 h-6 absolute top-0 right-0 z-50 bg-black dark:bg-white rounded-full cursor-pointer hidden group-hover/image:flex items-center justify-center'
                 onClick={() => {
                   setFile(null);
-                  // imageElementRef.current?.value = "";
+                  imageElementRef.current?.value;
                 }}
               >
                 <XIcon className='w-5 h-5 text-white dark:text-black' />

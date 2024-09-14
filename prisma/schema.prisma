@@ -96,7 +96,7 @@ model Authenticator {
 }
 model Post {
   id                String  @id @default(cuid())
-  text              String
+  text              String?
   file              String?
   mention           String?  
   hash              String?
