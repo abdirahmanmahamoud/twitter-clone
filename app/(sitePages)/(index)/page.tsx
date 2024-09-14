@@ -5,6 +5,7 @@ import Header from "./_components/Header";
 import { AuthOptions } from "@/AuthOptions";
 import { User } from "@prisma/client";
 import db from "@/lib/db";
+import { Suspense } from "react";
 
 export default async function Home() {
   const session = await getServerSession(AuthOptions);
@@ -12,49 +13,15 @@ export default async function Home() {
 
   const userMention = await db.user.findMany({});
 
-  const post = await db.post.findMany({
-    select: {
-      id: true,
-      text: true,
-      file: true,
-      reply: true,
-      repost: true,
-      like: true,
-      view: true,
-      createdAt: true,
-      mention: true,
-      user: {
-        select: {
-          name: true,
-          image: true,
-          username: true,
-          accountType: true,
-          verifiedBtn: true,
-          id: true,
-          bio: true,
-        },
-      },
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
-
-  const mentionUser = await db.user.findMany({
-    where: {
-      id: {
-        in: post.map((p) => p.mention).filter((id) => id !== null),
-      },
-    },
-  });
-
   return (
     <div className='w-full flex'>
       <div className='w-full lg:w-[75%]'>
         <Header />
         <div className='mt-16 w-full px-4'>
           <CreatePost user={user} userMention={userMention} />
-          <FeedPost posts={post} mentionUser={mentionUser as any} />
+          <Suspense fallback={<FeedPost.Skeleton />}>
+            <FeedPost session={user} />
+          </Suspense>
         </div>
       </div>
       <div className='hidden lg:block lg:w-[25%]'>7jkry</div>
