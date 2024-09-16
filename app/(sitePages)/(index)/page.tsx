@@ -7,6 +7,7 @@ import { User } from "@prisma/client";
 import db from "@/lib/db";
 import { Suspense } from "react";
 import SearchUser from "@/components/SearchUser";
+import Trends from "@/components/Trends";
 
 export default async function Home() {
   const session = await getServerSession(AuthOptions);
@@ -27,6 +28,9 @@ export default async function Home() {
       </div>
       <div className='hidden lg:block lg:w-[30%]'>
         <SearchUser />
+        <div className='mt-16'>
+          <Trends />
+        </div>
       </div>
     </div>
   );

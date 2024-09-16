@@ -131,7 +131,7 @@ const SearchUser = () => {
         </div>
         <div
           className={cn(
-            "w-full absolute mt-1 bg-white dark:bg-black max-h-[32rem] overflow-auto shadow-md py-2 px-2 pb-3 click5",
+            "w-full absolute mt-1 bg-white dark:bg-black max-h-[32rem] overflow-auto shadow-md py-2 px-2 pb-3 z-50 click5",
             show ? "block" : "hidden"
           )}
           onClick={handleShow}
