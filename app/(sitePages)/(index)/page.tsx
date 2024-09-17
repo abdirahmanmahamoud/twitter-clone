@@ -28,7 +28,7 @@ export default async function Home() {
       </div>
       <div className='hidden lg:block lg:w-[30%]'>
         <SearchUser />
-        <div className='mt-16'>
+        <div className='mt-16 z-0'>
           <Trends />
         </div>
       </div>

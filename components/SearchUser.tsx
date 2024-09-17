@@ -150,7 +150,7 @@ const SearchUser = () => {
           <div className='w-full mt-2 space-y-2'>
             {data?.map((user) => (
               <div
-                className='w-full flex items-center space-x-3 hover:bg-slate-300/45 dark:hover:bg-slate-600/45 cursor-pointer pt-2'
+                className='w-full flex items-center space-x-3 hover:bg-slate-300/45 dark:hover:bg-slate-600/45 cursor-pointer pt-2 z-50'
                 key={user.id}
               >
                 <Link

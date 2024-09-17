@@ -2,7 +2,7 @@ import { Ellipsis } from "lucide-react";
 
 const Trends = () => {
   return (
-    <div className='w-[20%] fixed shadow-3xl shadow-black/20'>
+    <div className='shadow-3xl shadow-black/20 dark:shadow-white/20 rounded-b-2xl'>
       <div className='w-full py-3 px-2'>
         <h1 className='text-lg font-bold'>Trends For You</h1>
       </div>
@@ -76,6 +76,9 @@ const Trends = () => {
             <Ellipsis className='w-4 h-4 cursor-pointer' />
           </div>
           <h2 className='text-base font-medium'>Champions league</h2>
+        </div>
+        <div className='w-full rounded-b-2xl p-2 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer'>
+          <span className='text-sm text-blue-700'>Show more</span>
         </div>
       </div>
     </div>
