@@ -8,6 +8,7 @@ import db from "@/lib/db";
 import { Suspense } from "react";
 import SearchUser from "@/components/SearchUser";
 import Trends from "@/components/Trends";
+import WhoToFollow from "@/components/WhoToFollow";
 
 export default async function Home() {
   const session = await getServerSession(AuthOptions);
@@ -30,6 +31,7 @@ export default async function Home() {
         <SearchUser />
         <div className='mt-16 z-0'>
           <Trends />
+          <WhoToFollow />
         </div>
       </div>
     </div>
