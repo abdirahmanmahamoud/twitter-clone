@@ -6,7 +6,7 @@ const WhoToFollow = async () => {
   const user = users.slice(0, 3);
 
   return (
-    <div className='mt-3 shadow-3xl shadow-black/20 dark:shadow-white/20 rounded-b-2xl'>
+    <div className='mt-3 shadow-3xl shadow-black/20 dark:shadow-white/20 rounded-b-2xl z-0'>
       <div className='w-full py-3 px-2'>
         <h1 className='text-lg font-bold'>Who To Follow</h1>
       </div>
